@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS  # <-- añadido
 from web3 import Web3
 import sqlite3
 import threading
@@ -35,7 +36,7 @@ def switch_rpc():
     print(f"🔄 Cambiando RPC a: {RPC_ENDPOINTS[current_rpc_index]}")
 
 # ----------------------------
-# 🏦 Direcciones de contratos (en formato checksum)
+# 🏦 Direcciones de contratos (checksum)
 # ----------------------------
 MORPHO_DEFAULT = Web3.to_checksum_address("0x7e97fa6893871A2751B5fE961978DCCb2c201E65")
 AAVE_USDC = Web3.to_checksum_address("0x724dc807b04555b71ed48a6896b6f41593b8c637")
@@ -75,7 +76,6 @@ conn.commit()
 # ----------------------------
 def get_balances(user_address):
     try:
-        # Convertimos la dirección del usuario a checksum
         user_address = Web3.to_checksum_address(user_address)
 
         morpho = provider.eth.contract(address=MORPHO_DEFAULT, abi=ERC20_ABI)
@@ -159,6 +159,8 @@ threading.Thread(target=robot_loop, daemon=True).start()
 # 🌐 API Flask
 # ----------------------------
 app = Flask(__name__)
+CORS(app)  # <-- Permite CORS desde cualquier dominio
+# Para restringir: CORS(app, origins=["https://renderonbalance.edgeone.app"])
 
 @app.route("/api/latest", methods=["GET"])
 def latest_snapshot():
@@ -197,4 +199,3 @@ def stats():
 if __name__ == "__main__":
     print("🚀 Iniciando robot + API Flask en http://0.0.0.0:5000 ...")
     app.run(host="0.0.0.0", port=5000)
-
