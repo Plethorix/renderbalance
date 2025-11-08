@@ -35,12 +35,12 @@ def switch_rpc():
     print(f"🔄 Cambiando RPC a: {RPC_ENDPOINTS[current_rpc_index]}")
 
 # ----------------------------
-# 🏦 Direcciones de contratos
+# 🏦 Direcciones de contratos (en formato checksum)
 # ----------------------------
-MORPHO_DEFAULT = "0x7e97fa6893871A2751B5fE961978DCCb2c201E65"
-AAVE_USDC = "0x724dc807b04555b71ed48a6896b6f41593b8c637"
-AAVE_DEBT = "0xf611aeb5013fd2c0511c9cd55c7dc5c1140741a6"
-EULER_USDC_EARN = "0xe4783824593a50Bfe9dc873204CEc171ebC62dE0"
+MORPHO_DEFAULT = Web3.to_checksum_address("0x7e97fa6893871A2751B5fE961978DCCb2c201E65")
+AAVE_USDC = Web3.to_checksum_address("0x724dc807b04555b71ed48a6896b6f41593b8c637")
+AAVE_DEBT = Web3.to_checksum_address("0xf611aeb5013fd2c0511c9cd55c7dc5c1140741a6")
+EULER_USDC_EARN = Web3.to_checksum_address("0xe4783824593a50Bfe9dc873204CEc171ebC62dE0")
 
 ERC20_ABI = [
     {"constant": True, "inputs": [{"name": "account", "type": "address"}],
@@ -75,6 +75,9 @@ conn.commit()
 # ----------------------------
 def get_balances(user_address):
     try:
+        # Convertimos la dirección del usuario a checksum
+        user_address = Web3.to_checksum_address(user_address)
+
         morpho = provider.eth.contract(address=MORPHO_DEFAULT, abi=ERC20_ABI)
         aave = provider.eth.contract(address=AAVE_USDC, abi=ERC20_ABI)
         debt = provider.eth.contract(address=AAVE_DEBT, abi=ERC20_ABI)
@@ -194,3 +197,4 @@ def stats():
 if __name__ == "__main__":
     print("🚀 Iniciando robot + API Flask en http://0.0.0.0:5000 ...")
     app.run(host="0.0.0.0", port=5000)
+
