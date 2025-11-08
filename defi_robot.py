@@ -11,7 +11,7 @@ import os
 # 🔌 Configuración
 # ----------------------------
 USER = os.getenv("USER_ADDRESS", "0x0000000000000000000000000000000000000000")
-INTERVALO = 60  # segundos
+INTERVALO = 300  # segundos
 DB_FILE = "defi_data.db"
 LIMIT_REGISTROS = 10000
 
