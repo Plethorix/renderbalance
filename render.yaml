@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: defi-robot
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "./start.sh"
+    envVars:
+      - key: USER_ADDRESS
+        sync: false
