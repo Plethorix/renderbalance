@@ -1,4 +1,4 @@
 flask
 web3
 gunicorn
-flask-cors==4.1.1
+flask-cors==6.0.0
